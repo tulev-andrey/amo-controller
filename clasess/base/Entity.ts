@@ -22,7 +22,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields>
 {
   constructor(
     protected amo: Amo,
-    protected type: N,
+    protected type: EntitiesType,
   ) {
     this.url = 'api/v4/' + type;
     this.limit = 250;
@@ -56,7 +56,8 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields>
           limit: this.limit,
         },
       });
-      const entity = response.data._embedded[this.type];
+      const entity = response.data._embedded?.[this.type];
+      if (!entity) return null;
       const result = acc.concat(entity);
       if (entity.length === this.limit) {
         return this.getAll(params, ++page, result);

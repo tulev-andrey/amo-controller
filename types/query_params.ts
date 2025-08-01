@@ -18,15 +18,15 @@ type Filter = FilterLeads | FilterContacts | FilterCompanies;
 type Order = 'asc' | 'desc';
 
 export interface MainFilter {
-  id?: number;
+  id?: number | number[];
   name?: string;
   created_by?: number | number[];
   updated_by?: number | number[];
   responsible_user_id?: number | number[];
-  created_at: FromTo;
-  updated_at: FromTo;
-  closed_at: FromTo;
-  closest_task_at: FromTo;
+  created_at?: FromTo;
+  updated_at?: FromTo;
+  closed_at?: FromTo;
+  closest_task_at?: FromTo;
 }
 
 export interface FilterLeads extends MainFilter {

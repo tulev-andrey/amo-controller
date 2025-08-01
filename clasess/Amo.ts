@@ -1,11 +1,14 @@
 import axios from 'axios';
 import Bottleneck from 'bottleneck';
-import AxiosInstance = Axios.AxiosInstance;
 import Leads from './Leads';
 import Companies from './Companies';
 import Contacts from './Contacts';
 import Users from './Users';
 import Pipelines from './Pipelines';
+import LossReasons from './LossReasons';
+import Notes from './Notes';
+import AxiosInstance = Axios.AxiosInstance;
+import Tags from './Tags';
 
 export default class Amo {
   public instance: AxiosInstance;
@@ -16,7 +19,7 @@ export default class Amo {
     private options?: { rps?: number },
   ) {
     this.limiter = new Bottleneck({
-      minTime: 1000 / Math.ceil(options?.rps || 6),
+      minTime: 1000 / Math.ceil(this.options?.rps || 6),
       maxConcurrent: 1,
     });
     this.instance = axios.create({
@@ -36,4 +39,15 @@ export default class Amo {
   public companies = new Companies(this);
   public pipelines = new Pipelines(this);
   public users = new Users(this);
+  public loss_reasons = new LossReasons(this);
+  public notes = {
+    leads: new Notes(this, 'leads'),
+    contacts: new Notes(this, 'contacts'),
+    companies: new Notes(this, 'companies'),
+  };
+  public tags = {
+    leads: new Tags(this, 'leads'),
+    contacts: new Tags(this, 'contacts'),
+    companies: new Tags(this, 'companies'),
+  };
 }

@@ -3,10 +3,19 @@ import {
   QueryParamsForSingle,
 } from '../../types/query_params';
 import Amo from '../Amo';
-import { Response, ResponseGetOnly } from '../../types/responses';
+import { ResponseGetOnly } from '../../types/responses';
 import logError from '../../utils/error';
 
-export type EntitiesGetOnlyType = 'pipelines' | 'leads/pipelines' | 'users';
+export type EntitiesGetOnlyType =
+  | 'pipelines'
+  | 'leads/pipelines'
+  | 'users'
+  | 'loss_reasons'
+  | 'leads/loss_reasons'
+  | 'tags'
+  | 'leads/tags'
+  | 'contacts/tags'
+  | 'companies/tags';
 
 export interface EntityGetOnlyClass<E> {
   url: string;
@@ -29,8 +38,9 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E>
     this.url = 'api/v4/' + type;
     this.limit = 100;
 
-    if (type === 'leads/pipelines') {
-      this.type = 'pipelines';
+    if (/\//.test(type)) {
+      const splited = type.split('/');
+      this.type = splited[splited.length - 1] as EntitiesGetOnlyType;
     }
   }
 

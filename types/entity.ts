@@ -2,7 +2,15 @@ import { QueryParamsForAll, QueryParamsForSingle } from './query_params';
 import { CustomField } from './custom_fields';
 import { CreateResponse, UpdateResponse } from './responses';
 
-export type EntitiesType = 'leads' | 'contacts' | 'companies';
+export type EntitiesType =
+  | 'leads'
+  | 'contacts'
+  | 'companies'
+  | 'notes'
+  | 'leads/notes'
+  | 'contacts/notes'
+  | 'companies/notes';
+export type SecondEntityType = 'leads' | 'contacts' | 'companies';
 
 export interface EntityClass<E extends EntitiesFields> {
   url: string;
@@ -23,7 +31,7 @@ export interface EntitiesFields {
   id?: number;
   created_at: number;
   updated_at: number;
-  custom_fields_values: CustomField[] | null;
+  custom_fields_values?: CustomField[] | null;
 }
 
 export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> &
