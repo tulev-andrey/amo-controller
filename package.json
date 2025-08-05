@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "test": "ts-node index.ts"
   },
   "author": "Tulev Andrey",
   "license": "ISC",

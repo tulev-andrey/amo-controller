@@ -13,10 +13,8 @@ export default class Contacts extends Entity<'contacts', Contact> {
     code: 'PHONE' | 'EMAIL',
   ): Promise<Contact[] | null> {
     if (!query) return null;
-    if (code === 'PHONE') {
-      query = query.replace(/\D/g, '');
-      if (query.length === 12) query = query.substring(1);
-    }
+    if (code === 'PHONE') query = this.chorePhone(query);
+    if (code === 'EMAIL') query = this.choreEmail(query);
 
     const result: Contact[] = [];
     const contacts = await this.get({ query });
@@ -25,7 +23,13 @@ export default class Contacts extends Entity<'contacts', Contact> {
     for (const contact of contacts) {
       const field = this.getCustomFieldByCode(contact, code);
       if (field) {
-        if (field.values.map((value) => value.value).includes(query)) {
+        const values = field.values.map((value) => value.value);
+        const test = values.some((value) => {
+          if (code === 'PHONE') return query === this.chorePhone(value);
+          if (code === 'EMAIL') return query === this.choreEmail(value);
+          return false;
+        });
+        if (test) {
           result.push(contact);
         }
       }
@@ -42,5 +46,15 @@ export default class Contacts extends Entity<'contacts', Contact> {
       if (field.field_code && field.field_code === code) return field;
     });
     return field || null;
+  }
+
+  chorePhone(phone: string) {
+    phone = phone.replace(/\D/g, '');
+    if (phone.length === 12) phone = phone.substring(1);
+    return phone;
+  }
+
+  choreEmail(email: string) {
+    return email.trim().toLowerCase();
   }
 }
