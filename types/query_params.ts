@@ -1,12 +1,8 @@
-export interface QueryParamsForSingle extends QueryParamsForAll {
-  page?: number;
-  limit?: number;
-}
-
-export interface QueryParamsForAll {
-  with?: string;
+export interface QueryParams {
+  with?: string[];
   query?: string | number;
   filter?: Filter;
+  limit?: number;
   order?: {
     id?: Order;
     created_at?: Order;

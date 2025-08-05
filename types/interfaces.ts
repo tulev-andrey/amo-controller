@@ -1,12 +1,7 @@
-import { QueryParamsForAll, QueryParamsForSingle } from './query_params';
+import { QueryParams } from './query_params';
 
 export interface EntityClass<E> {
   url: string;
   limit: number;
-  get(params: QueryParamsForSingle): Promise<E[] | null>;
-  getAll(
-    params: QueryParamsForAll,
-    page: number,
-    acc: E[],
-  ): Promise<E[] | null>;
+  get(params: QueryParams, page: number, acc: E[]): Promise<E[] | null>;
 }

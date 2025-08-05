@@ -1,7 +1,4 @@
-import {
-  QueryParamsForAll,
-  QueryParamsForSingle,
-} from '../../types/query_params';
+import { QueryParams } from '../../types/query_params';
 import Amo from '../Amo';
 import {
   CreateResponse,
@@ -31,36 +28,24 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields>
   readonly url: string;
   readonly limit: number;
 
-  async get(params: QueryParamsForSingle = {}): Promise<E[] | null> {
-    try {
-      const response = await this.amo.instance.get<Response<N, E>>(this.url, {
-        params,
-      });
-      return response.data._embedded?.[this.type];
-    } catch (error) {
-      logError(`get ${this.type} error`, error);
-      return null;
-    }
-  }
-
-  async getAll(
-    params: QueryParamsForAll = {},
+  async get(
+    params: QueryParams = {},
     page = 1,
     acc: E[] = [],
   ): Promise<E[] | null> {
     try {
       const response = await this.amo.instance.get<Response<N, E>>(this.url, {
         params: {
+          limit: this.limit,
           ...params,
           page,
-          limit: this.limit,
         },
       });
       const entity = response.data._embedded?.[this.type];
       if (!entity) return null;
       const result = acc.concat(entity);
-      if (entity.length === this.limit) {
-        return this.getAll(params, ++page, result);
+      if (entity.length === (params.limit || this.limit)) {
+        return this.get(params, ++page, result);
       }
       return result;
     } catch (error) {
