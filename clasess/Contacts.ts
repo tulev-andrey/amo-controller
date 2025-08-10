@@ -2,6 +2,7 @@ import Amo from './Amo';
 import { Contact } from '../types/contact';
 import Entity from './base/Entity';
 import { CustomField } from '../types/custom_fields';
+import { QueryParams } from '../types/query_params';
 
 export default class Contacts extends Entity<'contacts', Contact> {
   constructor(protected amo: Amo) {
@@ -11,13 +12,14 @@ export default class Contacts extends Entity<'contacts', Contact> {
   public async getByCode(
     query: string,
     code: 'PHONE' | 'EMAIL',
+    params: QueryParams = {},
   ): Promise<Contact[] | null> {
     if (!query) return null;
     if (code === 'PHONE') query = this.chorePhone(query);
     if (code === 'EMAIL') query = this.choreEmail(query);
 
     const result: Contact[] = [];
-    const contacts = await this.get({ query });
+    const contacts = await this.get({ ...params, query });
     if (!contacts) return null;
 
     for (const contact of contacts) {
