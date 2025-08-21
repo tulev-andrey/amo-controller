@@ -52,7 +52,7 @@ export default class Contacts extends Entity<'contacts', Contact> {
 
   chorePhone(phone: string) {
     phone = phone.replace(/\D/g, '');
-    if (phone.length === 12) phone = phone.substring(1);
+    if (phone.length === 11) phone = phone.substring(1);
     return phone;
   }
 
