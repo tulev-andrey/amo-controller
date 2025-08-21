@@ -12,6 +12,7 @@ export interface Contact {
   created_at: number;
   updated_at: number;
   closest_task_at: number | null;
+  is_deleted: boolean;
   custom_fields_values: CustomField[] | null;
   account_id: number;
   _embedded: ContactEmbedded;

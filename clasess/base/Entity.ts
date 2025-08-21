@@ -37,14 +37,14 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields>
       const response = await this.amo.instance.get<Response<N, E>>(this.url, {
         params: {
           limit: this.limit,
-          ...params,
           page,
+          ...params,
         },
       });
       const entity = response.data._embedded?.[this.type];
       if (!entity) return null;
       const result = acc.concat(entity);
-      if (entity.length === (params.limit || this.limit)) {
+      if (entity.length === (params.limit || this.limit) && !params.page) {
         return this.get(params, ++page, result);
       }
       return result;

@@ -7,4 +7,5 @@ export default function logError(name: string, error: any) {
     validation_errors: error.response?.data?.['validation-errors']?.[0]?.errors,
     error,
   });
+  throw error;
 }

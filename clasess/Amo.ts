@@ -18,9 +18,10 @@ export default class Amo {
     private token: string,
     private options?: { rps?: number },
   ) {
+    const rps = this.options?.rps || 6;
     this.limiter = new Bottleneck({
-      minTime: 1000 / Math.ceil(this.options?.rps || 6),
-      maxConcurrent: 1,
+      minTime: Math.ceil(1000 / rps),
+      maxConcurrent: rps,
     });
     this.instance = axios.create({
       baseURL: this.baseURL,

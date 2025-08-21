@@ -3,6 +3,7 @@ export interface QueryParams {
   query?: string | number;
   filter?: Filter;
   limit?: number;
+  page?: number;
   order?: {
     id?: Order;
     created_at?: Order;
