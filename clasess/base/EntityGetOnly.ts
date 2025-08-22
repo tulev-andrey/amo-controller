@@ -12,7 +12,8 @@ export type EntitiesGetOnlyType =
   | 'tags'
   | 'leads/tags'
   | 'contacts/tags'
-  | 'companies/tags';
+  | 'companies/tags'
+  | 'events';
 
 export interface EntityGetOnlyClass<E> {
   url: string;

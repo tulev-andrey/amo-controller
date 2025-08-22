@@ -9,6 +9,7 @@ import LossReasons from './LossReasons';
 import Notes from './Notes';
 import AxiosInstance = Axios.AxiosInstance;
 import Tags from './Tags';
+import Events from './Events';
 
 export default class Amo {
   public instance: AxiosInstance;
@@ -51,4 +52,5 @@ export default class Amo {
     contacts: new Tags(this, 'contacts'),
     companies: new Tags(this, 'companies'),
   };
+  public events = new Events(this);
 }
