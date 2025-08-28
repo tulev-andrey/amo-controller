@@ -37,7 +37,7 @@ export default class Contacts extends Entity<'contacts', Contact> {
       }
     }
 
-    return result;
+    return result.length ? result : null;
   }
 
   public getCustomFieldByCode(
