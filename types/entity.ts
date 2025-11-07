@@ -18,6 +18,11 @@ export interface EntityClass<E extends EntitiesFields> {
   get(params: QueryParams, page: number, acc: E[]): Promise<E[] | null>;
   create(entities: Partial<E>[]): Promise<CreateResponse[] | null>;
   update(entities: PartialExcept<E, 'id'>[]): Promise<UpdateResponse[] | null>;
+  unlink(
+    entity: SecondEntityType,
+    id: number,
+    linkIds: number[],
+  ): Promise<void>;
   getCustomFieldById(entity: E, id: number): CustomField | null;
   getNewest(entities: E[], by: 'created_at' | 'updated_at'): E;
 }
@@ -31,3 +36,11 @@ export interface EntitiesFields {
 
 export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> &
   Pick<T, K>;
+
+export interface LinkData {
+  entity_id: number;
+  to_entity_id: number;
+  to_entity_type: SecondEntityType;
+}
+
+export interface UnlinkData extends LinkData {}

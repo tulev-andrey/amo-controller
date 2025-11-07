@@ -12,6 +12,9 @@ import {
   EntityClass,
   EntitiesFields,
   PartialExcept,
+  SecondEntityType,
+  UnlinkData,
+  LinkData,
 } from '../../types/entity';
 
 export default class Entity<N extends EntitiesType, E extends EntitiesFields>
@@ -90,6 +93,36 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields>
     } catch (error) {
       logError(`get ${this.type} error`, error);
       return null;
+    }
+  }
+
+  async link(entity: SecondEntityType, id: number, linkIds: number[]) {
+    try {
+      const data: LinkData[] = [];
+      for (const link of linkIds)
+        data.push({
+          entity_id: id,
+          to_entity_id: link,
+          to_entity_type: entity,
+        });
+      await this.amo.instance.post(this.url + '/link', data);
+    } catch (error) {
+      logError(`link ${this.type} error`, error);
+    }
+  }
+
+  async unlink(entity: SecondEntityType, id: number, linkIds: number[]) {
+    try {
+      const data: UnlinkData[] = [];
+      for (const link of linkIds)
+        data.push({
+          entity_id: id,
+          to_entity_id: link,
+          to_entity_type: entity,
+        });
+      await this.amo.instance.post(this.url + '/unlink', data);
+    } catch (error) {
+      logError(`unlink ${this.type} error`, error);
     }
   }
 }
