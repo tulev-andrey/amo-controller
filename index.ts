@@ -1,2 +1,2 @@
-import Amo from './clasess/Amo';
-export default Amo;
+import Amo from './clasess/Amo'
+export default Amo

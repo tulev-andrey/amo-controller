@@ -1,12 +1,8 @@
-import { QueryParams } from '../../types/query_params';
-import Amo from '../Amo';
-import {
-  CreateResponse,
-  Response,
-  UpdateResponse,
-} from '../../types/responses';
-import logError from '../../utils/error';
-import { CustomField } from '../../types/custom_fields';
+import { QueryParams } from '../../types/query_params'
+import Amo from '../Amo'
+import { CreateResponse, Response, UpdateResponse } from '../../types/responses'
+import logError from '../../utils/error'
+import { CustomField } from '../../types/custom_fields'
 import {
   EntitiesType,
   EntityClass,
@@ -15,27 +11,21 @@ import {
   SecondEntityType,
   UnlinkData,
   LinkData,
-} from '../../types/entity';
+} from '../../types/entity'
 
-export default class Entity<N extends EntitiesType, E extends EntitiesFields>
-  implements EntityClass<E>
-{
+export default class Entity<N extends EntitiesType, E extends EntitiesFields> implements EntityClass<E> {
   constructor(
     protected amo: Amo,
     protected type: EntitiesType,
   ) {
-    this.url = 'api/v4/' + type;
-    this.limit = 250;
+    this.url = 'api/v4/' + type
+    this.limit = 250
   }
 
-  readonly url: string;
-  readonly limit: number;
+  readonly url: string
+  readonly limit: number
 
-  async get(
-    params: QueryParams = {},
-    page = 1,
-    acc: E[] = [],
-  ): Promise<E[] | null> {
+  async get(params: QueryParams = {}, page = 1, acc: E[] = []): Promise<E[] | null> {
     try {
       const response = await this.amo.instance.get<Response<N, E>>(this.url, {
         params: {
@@ -43,86 +33,82 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields>
           page,
           ...params,
         },
-      });
-      const entity = response.data._embedded?.[this.type];
-      if (!entity) return null;
-      const result = acc.concat(entity);
+      })
+      const entity = response.data._embedded?.[this.type]
+      if (!entity) return null
+      const result = acc.concat(entity)
       if (entity.length === (params.limit || this.limit) && !params.page) {
-        return this.get(params, ++page, result);
+        return this.get(params, ++page, result)
       }
-      return result;
+      return result
     } catch (error) {
-      logError(`get ${this.type} error`, error);
-      return null;
+      logError(`get ${this.type} error`, error)
+      return null
     }
   }
 
   getCustomFieldById(entity: E, id: number): CustomField | null {
     const field = entity.custom_fields_values?.find((field) => {
-      if (field.field_id && field.field_id === id) return field;
-    });
-    return field || null;
+      if (field.field_id && field.field_id === id) return field
+    })
+    return field || null
   }
 
   getNewest(entities: E[], by: 'created_at' | 'updated_at'): E {
-    let newest = entities[0];
+    let newest = entities[0]
     for (const entity of entities) {
-      if (entity[by] > newest[by]) newest = entity;
+      if (entity[by] > newest[by]) newest = entity
     }
-    return newest;
+    return newest
   }
 
-  async create(entities: Partial<E>[]) {
+  async create(entities: Partial<E>[]): Promise<CreateResponse[] | null> {
     try {
-      const response = await this.amo.instance.post<
-        Response<N, CreateResponse>
-      >(this.url, entities);
-      return response.data._embedded?.[this.type];
+      const response = await this.amo.instance.post<Response<N, CreateResponse>>(this.url, entities)
+      return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error);
-      return null;
+      logError(`get ${this.type} error`, error)
+      return null
     }
   }
 
-  async update(entities: PartialExcept<E, 'id'>[]) {
+  async update(entities: PartialExcept<E, 'id'>[]): Promise<UpdateResponse[] | null> {
     try {
-      const response = await this.amo.instance.patch<
-        Response<N, UpdateResponse>
-      >(this.url, entities);
-      return response.data._embedded?.[this.type];
+      const response = await this.amo.instance.patch<Response<N, UpdateResponse>>(this.url, entities)
+      return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error);
-      return null;
+      logError(`get ${this.type} error`, error)
+      return null
     }
   }
 
-  async link(entity: SecondEntityType, id: number, linkIds: number[]) {
+  async link(entity: SecondEntityType, id: number, linkIds: number[]): Promise<void> {
     try {
-      const data: LinkData[] = [];
+      const data: LinkData[] = []
       for (const link of linkIds)
         data.push({
           entity_id: id,
           to_entity_id: link,
           to_entity_type: entity,
-        });
-      await this.amo.instance.post(this.url + '/link', data);
+        })
+      await this.amo.instance.post(this.url + '/link', data)
     } catch (error) {
-      logError(`link ${this.type} error`, error);
+      logError(`link ${this.type} error`, error)
     }
   }
 
-  async unlink(entity: SecondEntityType, id: number, linkIds: number[]) {
+  async unlink(entity: SecondEntityType, id: number, linkIds: number[]): Promise<void> {
     try {
-      const data: UnlinkData[] = [];
+      const data: UnlinkData[] = []
       for (const link of linkIds)
         data.push({
           entity_id: id,
           to_entity_id: link,
           to_entity_type: entity,
-        });
-      await this.amo.instance.post(this.url + '/unlink', data);
+        })
+      await this.amo.instance.post(this.url + '/unlink', data)
     } catch (error) {
-      logError(`unlink ${this.type} error`, error);
+      logError(`unlink ${this.type} error`, error)
     }
   }
 }

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "format": "prettier . --write",
-    "test": "ts-node index.ts"
+    "test": "tsx index.test.ts"
   },
   "author": "Tulev Andrey",
   "license": "ISC",
