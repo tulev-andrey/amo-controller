@@ -44,12 +44,12 @@ type FromTo = {
 export interface UserQueryParams extends Omit<QueryParams, 'filter' | 'order' | 'query'> {}
 
 interface EventFilter {
-  id: string[]
+  id?: string[]
   created_at?: FromTo
   created_by?: number | number[]
   entity?: 'lead' | 'contact' | 'company' | 'customer' | 'task'
   entity_id?: number | number[]
-  type:
+  type?:
     | 'lead_added'
     | 'lead_deleted'
     | 'lead_restored'
@@ -110,9 +110,9 @@ interface EventFilter {
     | 'message_to_cashier_note_added'
     | 'key_action_completed'
     | 'entity_merged'
-    | 'custom_field_{FIELD_ID}_value_changed'
-  value_before: any
-  value_after: any
+    | `custom_field_${number}_value_changed`
+  value_before?: any
+  value_after?: any
 }
 
 export interface EventQueryParams extends Omit<QueryParams, 'filter' | 'order' | 'query'> {

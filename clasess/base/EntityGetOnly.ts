@@ -49,7 +49,8 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends G
           limit: this.limit,
         },
       })
-      const entity = response.data._embedded[this.type]
+      const entity = response.data._embedded?.[this.type]
+      if (!entity) return null
       const result = acc.concat(entity)
       if (entity.length === this.limit) {
         return this.get(params, ++page, result)
