@@ -1,4 +1,4 @@
-import { QueryParams } from './query_params'
+import { DefaultQueryParams, QueryParams } from './query_params'
 import { CustomField } from './custom_fields'
 import { CreateResponse, UpdateResponse } from './responses'
 
@@ -7,15 +7,16 @@ export type EntitiesType =
   | 'contacts'
   | 'companies'
   | 'notes'
+  | 'tasks'
   | 'leads/notes'
   | 'contacts/notes'
   | 'companies/notes'
 export type SecondEntityType = 'leads' | 'contacts' | 'companies'
 
-export interface EntityClass<E extends EntitiesFields> {
+export interface EntityClass<E extends EntitiesFields, Q extends QueryParams> {
   url: string
   limit: number
-  get(params: QueryParams, page: number, acc: E[]): Promise<E[] | null>
+  get(params: Q, page: number, acc: E[]): Promise<E[] | null>
   create(entities: Partial<E>[]): Promise<CreateResponse[] | null>
   update(entities: PartialExcept<E, 'id'>[]): Promise<UpdateResponse[] | null>
   unlink(entity: SecondEntityType, id: number, linkIds: number[]): Promise<void>

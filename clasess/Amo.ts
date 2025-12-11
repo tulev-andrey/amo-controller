@@ -10,6 +10,7 @@ import Notes from './Notes'
 import AxiosInstance = Axios.AxiosInstance
 import Tags from './Tags'
 import Events from './Events'
+import Tasks from './Tasks'
 
 export default class Amo {
   public instance: AxiosInstance
@@ -39,14 +40,16 @@ export default class Amo {
   public leads = new Leads(this)
   public contacts = new Contacts(this)
   public companies = new Companies(this)
-  public pipelines = new Pipelines(this)
-  public users = new Users(this)
-  public loss_reasons = new LossReasons(this)
   public notes = {
     leads: new Notes(this, 'leads'),
     contacts: new Notes(this, 'contacts'),
     companies: new Notes(this, 'companies'),
   }
+  public tasks = new Tasks(this)
+
+  public pipelines = new Pipelines(this)
+  public users = new Users(this)
+  public loss_reasons = new LossReasons(this)
   public tags = {
     leads: new Tags(this, 'leads'),
     contacts: new Tags(this, 'contacts'),

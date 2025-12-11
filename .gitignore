@@ -1,4 +1,5 @@
 .idea
-dist
-amo
+.vscode
 node_modules
+amo
+.env

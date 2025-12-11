@@ -1,4 +1,4 @@
-export interface QueryParams {
+export interface DefaultQueryParams {
   with?: string[]
   query?: string | number
   filter?: Filter
@@ -13,6 +13,20 @@ export interface QueryParams {
 
 type Filter = FilterLeads | FilterContacts | FilterCompanies
 type Order = 'asc' | 'desc'
+type FromTo = {
+  from?: number
+  to?: number
+}
+
+export interface FilterLeads extends MainFilter {
+  price?: FromTo
+  statuses?: { pipeline_id: number; status_id: number }[]
+  pipeline_id?: number | number[]
+}
+
+export interface FilterContacts extends MainFilter {}
+
+export interface FilterCompanies extends MainFilter {}
 
 export interface MainFilter {
   id?: number | number[]
@@ -26,22 +40,53 @@ export interface MainFilter {
   closest_task_at?: FromTo
 }
 
-export interface FilterLeads extends MainFilter {
-  price?: FromTo
-  statuses?: { pipeline_id: number; status_id: number }[]
-  pipeline_id?: number | number[]
+export type QueryParams = DefaultQueryParams | TaskQueryParams
+
+export interface NoteQueryParams extends Omit<DefaultQueryParams, 'with' | 'query' | 'filter'> {
+  filter?: NoteFilter
 }
 
-export interface FilterContacts extends MainFilter {}
-
-export interface FilterCompanies extends MainFilter {}
-
-type FromTo = {
-  from: number
-  to: number
+export interface TaskQueryParams extends Omit<DefaultQueryParams, 'with' | 'query' | 'filter'> {
+  filter?: TaskFilter
 }
 
-export interface UserQueryParams extends Omit<QueryParams, 'filter' | 'order' | 'query'> {}
+export type GetOnlyParams =
+  | EventQueryParams
+  | UserQueryParams
+  | PipelineQueryParams
+  | LossReasonQueryParams
+  | TagQueryParams
+
+export interface EventQueryParams extends Omit<DefaultQueryParams, 'filter' | 'order' | 'query'> {
+  filter?: EventFilter
+}
+
+export interface UserQueryParams extends Omit<DefaultQueryParams, 'filter' | 'order' | 'query'> {}
+
+export interface PipelineQueryParams {}
+
+export interface LossReasonQueryParams {}
+
+export interface TagQueryParams extends Omit<DefaultQueryParams, 'filter' | 'order'> {
+  filter?: TagFilter
+}
+
+interface NoteFilter {
+  id?: number | number[]
+  entity_id?: number | number[]
+  note_type?: NoteTypes
+  updated_at?: FromTo
+}
+
+interface TaskFilter {
+  id?: number | number[]
+  entity_id?: number | number[]
+  entity_type?: 'leads' | 'contacts' | 'companies' | 'customers'
+  task_type?: number | number[]
+  responsible_user_id?: number | number[]
+  is_completed?: boolean
+  updated_at?: FromTo
+}
 
 interface EventFilter {
   id?: string[]
@@ -115,26 +160,19 @@ interface EventFilter {
   value_after?: any
 }
 
-export interface EventQueryParams extends Omit<QueryParams, 'filter' | 'order' | 'query'> {
-  filter?: EventFilter
-}
-
-export interface PipelineQueryParams {}
-
-export interface LossReasonQueryParams {}
-
 interface TagFilter {
   id?: number | number[]
   name?: string
 }
 
-export interface TagQueryParams extends Omit<QueryParams, 'filter' | 'order'> {
-  filter?: TagFilter
-}
-
-export type GetOnlyParams =
-  | UserQueryParams
-  | EventQueryParams
-  | PipelineQueryParams
-  | LossReasonQueryParams
-  | TagQueryParams
+type NoteTypes =
+  | 'common' // Текстовое примечание
+  | 'call_in' // Входящий звонок
+  | 'call_out' // Исходящий звонок
+  | 'service_message' // Системное сообщение (добавляется интеграциями)
+  | 'message_cashier' // Сообщение кассиру
+  | 'geolocation' // Текстовое примечание с гео-координатами (добавляются мобильным приложением)
+  | 'sms_in' // Входящее SMS
+  | 'sms_out' // Исходящее SMS
+  | 'extended_service_message' // Расширенное системное сообщение (поддерживает больше текста и сворачивается в интерфейсе)
+  | 'attachment' // Примечание с файлом

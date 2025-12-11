@@ -13,7 +13,9 @@ import {
   LinkData,
 } from '../../types/entity'
 
-export default class Entity<N extends EntitiesType, E extends EntitiesFields> implements EntityClass<E> {
+export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q extends QueryParams>
+  implements EntityClass<E, Q>
+{
   constructor(
     protected amo: Amo,
     protected type: EntitiesType,
@@ -25,7 +27,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields> im
   readonly url: string
   readonly limit: number
 
-  async get(params: QueryParams = {}, page = 1, acc: E[] = []): Promise<E[] | null> {
+  async get(params: Q = {} as Q, page = 1, acc: E[] = []): Promise<E[] | null> {
     try {
       const response = await this.amo.instance.get<Response<N, E>>(this.url, {
         params: {
@@ -35,7 +37,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields> im
         },
       })
       const entity = response.data._embedded?.[this.type]
-      if (!entity) return null
+      if (!entity) return []
       const result = acc.concat(entity)
       if (entity.length === (params.limit || this.limit) && !params.page) {
         return this.get(params, ++page, result)
