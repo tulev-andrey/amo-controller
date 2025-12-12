@@ -21,6 +21,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
     protected type: EntitiesType,
   ) {
     this.url = 'api/v4/' + type
+    this.type = type.split('/').at(-1) as EntitiesType
     this.limit = 250
   }
 
@@ -44,7 +45,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       }
       return result
     } catch (error) {
-      logError(`get ${this.type} error`, error)
+      logError(`get ${this.type} error`, error, error.response?.data)
       return null
     }
   }
@@ -69,7 +70,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       const response = await this.amo.instance.post<Response<N, CreateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error)
+      logError(`get ${this.type} error`, error, error.response?.data)
       return null
     }
   }
@@ -79,7 +80,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       const response = await this.amo.instance.patch<Response<N, UpdateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error)
+      logError(`get ${this.type} error`, error, error.response?.data)
       return null
     }
   }
@@ -95,7 +96,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
         })
       await this.amo.instance.post(this.url + '/link', data)
     } catch (error) {
-      logError(`link ${this.type} error`, error)
+      logError(`link ${this.type} error`, error, error.response?.data)
     }
   }
 
@@ -110,7 +111,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
         })
       await this.amo.instance.post(this.url + '/unlink', data)
     } catch (error) {
-      logError(`unlink ${this.type} error`, error)
+      logError(`unlink ${this.type} error`, error, error.response?.data)
     }
   }
 }

@@ -57,7 +57,7 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends G
       }
       return result
     } catch (error) {
-      logError(`get ${this.type} error`, error)
+      logError(`get ${this.type} error`, error, error.response?.data)
       return null
     }
   }
