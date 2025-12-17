@@ -1,4 +1,5 @@
 import { CustomField } from './custom_fields'
+import { Tag } from './tag'
 
 export interface Contact {
   id: number
@@ -19,9 +20,9 @@ export interface Contact {
 }
 
 export interface ContactEmbedded {
-  leads?: EmbeddedLead[]
-  companies?: EmbeddedCompany[]
-  tags?: Tag[]
+  leads?: Partial<EmbeddedLead>[]
+  companies?: Partial<EmbeddedCompany>[]
+  tags?: Partial<Tag>[]
 }
 
 export interface EmbeddedLead {
@@ -30,10 +31,4 @@ export interface EmbeddedLead {
 
 export interface EmbeddedCompany {
   id: number
-}
-
-export interface Tag {
-  id: number
-  name: string
-  color: string | null
 }
