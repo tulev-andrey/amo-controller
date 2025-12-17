@@ -20,9 +20,9 @@ export interface Contact {
 }
 
 export interface ContactEmbedded {
-  leads?: Partial<EmbeddedLead>[]
-  companies?: Partial<EmbeddedCompany>[]
-  tags?: Partial<Tag>[]
+  leads?: EmbeddedLead[]
+  companies?: EmbeddedCompany[]
+  tags?: Tag[]
 }
 
 export interface EmbeddedLead {

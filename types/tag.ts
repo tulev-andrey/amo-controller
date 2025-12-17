@@ -1,5 +1,5 @@
 export interface Tag {
-  id: number
-  name: string
-  color: string | null
+  id?: number
+  name?: string
+  color?: string | null
 }
