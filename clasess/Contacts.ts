@@ -49,7 +49,7 @@ export default class Contacts extends Entity<'contacts', Contact, DefaultQueryPa
 
   chorePhone(phone: string) {
     phone = phone.replace(/\D/g, '')
-    if (phone.length === 11) phone = phone.substring(1)
+    if (phone.length === 11 && (phone.startsWith('8') || phone.startsWith('7'))) phone = phone.substring(1)
     return phone
   }
 

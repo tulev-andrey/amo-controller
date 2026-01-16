@@ -2,24 +2,7 @@ import { GetOnlyParams } from '../../types/query_params'
 import Amo from '../Amo'
 import { ResponseGetOnly } from '../../types/responses'
 import logError from '../../utils/error'
-
-export type EntitiesGetOnlyType =
-  | 'pipelines'
-  | 'leads/pipelines'
-  | 'users'
-  | 'loss_reasons'
-  | 'leads/loss_reasons'
-  | 'tags'
-  | 'leads/tags'
-  | 'contacts/tags'
-  | 'companies/tags'
-  | 'events'
-
-export interface EntityGetOnlyClass<E, Q extends GetOnlyParams> {
-  url: string
-  limit: number
-  get(params: Q, page: number, acc: E[]): Promise<E[] | null>
-}
+import { EntitiesGetOnlyType, EntityGetOnlyClass } from '../../types/entity_get_only'
 
 export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends GetOnlyParams>
   implements EntityGetOnlyClass<E, Q>
@@ -57,7 +40,8 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends G
       }
       return result
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data)
+      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
   }

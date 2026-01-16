@@ -11,6 +11,7 @@ import AxiosInstance = Axios.AxiosInstance
 import Tags from './Tags'
 import Events from './Events'
 import Tasks from './Tasks'
+import { Logger } from 'winston'
 
 export default class Amo {
   public instance: AxiosInstance
@@ -18,7 +19,7 @@ export default class Amo {
   constructor(
     private baseURL: string,
     private token: string,
-    private options?: { rps?: number },
+    public readonly options?: { rps?: number; logs?: { customLogger?: Logger; throwErrors: boolean } },
   ) {
     const rps = this.options?.rps || 6
     this.limiter = new Bottleneck({

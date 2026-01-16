@@ -11,6 +11,7 @@ import {
   SecondEntityType,
   UnlinkData,
   LinkData,
+  ToUpdate,
 } from '../../types/entity'
 
 export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q extends QueryParams>
@@ -45,7 +46,8 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       }
       return result
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data)
+      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
   }
@@ -70,17 +72,23 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       const response = await this.amo.instance.post<Response<N, CreateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data)
+      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
   }
 
-  async update(entities: PartialExcept<E, 'id'>[]): Promise<UpdateResponse[] | null> {
+  async update(
+    entities: (E extends infer ExtendebleEntitiesForUpdate
+      ? PartialExcept<E, 'id'> & ToUpdate
+      : PartialExcept<E, 'id'>)[],
+  ): Promise<UpdateResponse[] | null> {
     try {
       const response = await this.amo.instance.patch<Response<N, UpdateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data)
+      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
   }
@@ -96,7 +104,8 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
         })
       await this.amo.instance.post(this.url + '/link', data)
     } catch (error) {
-      logError(`link ${this.type} error`, error, error.response?.data)
+      logError(`link ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      if (this.amo.options?.logs?.throwErrors) throw error
     }
   }
 
@@ -111,7 +120,8 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
         })
       await this.amo.instance.post(this.url + '/unlink', data)
     } catch (error) {
-      logError(`unlink ${this.type} error`, error, error.response?.data)
+      logError(`unlink ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      if (this.amo.options?.logs?.throwErrors) throw error
     }
   }
 }

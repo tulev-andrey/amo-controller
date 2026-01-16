@@ -1,6 +1,9 @@
 import { DefaultQueryParams, QueryParams } from './query_params'
 import { CustomField } from './custom_fields'
 import { CreateResponse, UpdateResponse } from './responses'
+import { Lead } from './lead'
+import { Contact } from './contact'
+import { Company } from './company'
 
 export type EntitiesType =
   | 'leads'
@@ -29,6 +32,13 @@ export interface EntitiesFields {
   created_at: number
   updated_at: number
   custom_fields_values?: CustomField[] | null
+}
+
+export type ExtendebleEntitiesForUpdate = Lead | Contact | Company
+
+export interface ToUpdate {
+  tags_to_add?: { id?: number; name?: string }[]
+  tags_to_delete?: { id?: number; name?: string }[]
 }
 
 export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>
