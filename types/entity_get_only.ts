@@ -16,4 +16,6 @@ export interface EntityGetOnlyClass<E, Q extends GetOnlyParams> {
   url: string
   limit: number
   get(params: Q, page: number, acc: E[]): Promise<E[] | null>
+  getNewest(entities: E[], by: 'created_at' | 'updated_at'): E
+  getOldest(entities: E[], by: 'created_at' | 'updated_at'): E
 }

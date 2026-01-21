@@ -25,6 +25,7 @@ export interface EntityClass<E extends EntitiesFields, Q extends QueryParams> {
   unlink(entity: SecondEntityType, id: number, linkIds: number[]): Promise<void>
   getCustomFieldById(entity: E, id: number): CustomField | null
   getNewest(entities: E[], by: 'created_at' | 'updated_at'): E
+  getOldest(entities: E[], by: 'created_at' | 'updated_at'): E
 }
 
 export interface EntitiesFields {

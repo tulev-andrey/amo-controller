@@ -39,7 +39,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
         },
       })
       const entity = response.data._embedded?.[this.type]
-      if (!entity) return []
+      if (!entity) return acc
       const result = acc.concat(entity)
       if (entity.length === (params.limit || this.limit) && !params.page) {
         return this.get(params, ++page, result)
@@ -67,12 +67,20 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
     return newest
   }
 
+  getOldest(entities: E[], by: 'created_at' | 'updated_at'): E {
+    let newest = entities[0]
+    for (const entity of entities) {
+      if (entity[by] < newest[by]) newest = entity
+    }
+    return newest
+  }
+
   async create(entities: Partial<E>[]): Promise<CreateResponse[] | null> {
     try {
       const response = await this.amo.instance.post<Response<N, CreateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(`create ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
       if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
@@ -87,7 +95,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       const response = await this.amo.instance.patch<Response<N, UpdateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(`update ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
       if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }

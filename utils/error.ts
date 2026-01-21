@@ -16,5 +16,4 @@ export default function logError(name: string, error: any, data?: any, loggerIns
     data,
   }
   loggerInstance.error(name, err)
-  console.error(name, err)
 }

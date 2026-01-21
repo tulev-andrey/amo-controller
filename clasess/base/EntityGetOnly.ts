@@ -33,7 +33,7 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends G
         },
       })
       const entity = response.data._embedded?.[this.type]
-      if (!entity) return []
+      if (!entity) return acc
       const result = acc.concat(entity)
       if (entity.length === this.limit) {
         return this.get(params, ++page, result)
@@ -44,5 +44,21 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends G
       if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
+  }
+
+  getNewest(entities: E[], by: 'created_at' | 'updated_at'): E {
+    let newest = entities[0]
+    for (const entity of entities) {
+      if (entity[by] > newest[by]) newest = entity
+    }
+    return newest
+  }
+
+  getOldest(entities: E[], by: 'created_at' | 'updated_at'): E {
+    let newest = entities[0]
+    for (const entity of entities) {
+      if (entity[by] < newest[by]) newest = entity
+    }
+    return newest
   }
 }

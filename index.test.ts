@@ -1,12 +1,13 @@
+import { error, log } from 'console'
 import Amo from './clasess/Amo'
 import 'dotenv/config'
-import { Task } from './types/task'
+import axios from 'axios'
 
 if (!process.env.API_URL || !process.env.API_TOKEN) {
   throw new Error('API_URL and API_TOKEN must be set in .env file')
 }
 
-const amo = new Amo(process.env.API_URL, process.env.API_TOKEN)
+const amo = new Amo(process.env.API_URL, process.env.API_TOKEN, { logs: { throwErrors: true } })
 // const task: Partial<Task> = {
 //   entity_id: 34599807,
 //   entity_type: 'contacts',
@@ -28,3 +29,9 @@ const amo = new Amo(process.env.API_URL, process.env.API_TOKEN)
 // amo.notes.leads.create([leadNote]).then((noteResponse) => {
 //   console.log(noteResponse)
 // })
+amo.companies.update([
+  {
+    id: 34134171,
+    tags_to_add: [{ name: '321' }],
+  },
+])

@@ -12,6 +12,7 @@ import Tags from './Tags'
 import Events from './Events'
 import Tasks from './Tasks'
 import { Logger } from 'winston'
+import qs from 'qs'
 
 export default class Amo {
   public instance: AxiosInstance
@@ -31,6 +32,9 @@ export default class Amo {
       headers: {
         Authorization: `Bearer ${this.token}`,
         'Content-Type': 'application/json',
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
       },
     })
     this.instance.interceptors.request.use(async (config) => {
