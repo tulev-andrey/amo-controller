@@ -38,6 +38,11 @@ export interface MainFilter {
   updated_at?: FromTo
   closed_at?: FromTo
   closest_task_at?: FromTo
+  custom_fields_values?: {
+    [key: number]: (string | number | boolean)[]
+    from?: number
+    to?: number
+  }
 }
 
 export type QueryParams = DefaultQueryParams | TaskQueryParams
