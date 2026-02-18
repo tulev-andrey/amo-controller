@@ -13,6 +13,7 @@ import {
   LinkData,
   ToUpdate,
 } from '../../types/entity'
+import { AxiosError } from 'axios'
 
 export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q extends QueryParams>
   implements EntityClass<E, Q>
@@ -46,7 +47,12 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       }
       return result
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(
+        `get ${this.type} error`,
+        error,
+        error instanceof AxiosError ? error.response?.data : null,
+        this.amo.options?.logs?.customLogger,
+      )
       if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
@@ -80,7 +86,12 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       const response = await this.amo.instance.post<Response<N, CreateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`create ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(
+        `create ${this.type} error`,
+        error,
+        error instanceof AxiosError ? error.response?.data : null,
+        this.amo.options?.logs?.customLogger,
+      )
       if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
@@ -95,7 +106,12 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       const response = await this.amo.instance.patch<Response<N, UpdateResponse>>(this.url, entities)
       return response.data._embedded?.[this.type]
     } catch (error) {
-      logError(`update ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(
+        `update ${this.type} error`,
+        error,
+        error instanceof AxiosError ? error.response?.data : null,
+        this.amo.options?.logs?.customLogger,
+      )
       if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
@@ -112,7 +128,12 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
         })
       await this.amo.instance.post(this.url + '/link', data)
     } catch (error) {
-      logError(`link ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(
+        `link ${this.type} error`,
+        error,
+        error instanceof AxiosError ? error.response?.data : null,
+        this.amo.options?.logs?.customLogger,
+      )
       if (this.amo.options?.logs?.throwErrors) throw error
     }
   }
@@ -128,7 +149,12 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
         })
       await this.amo.instance.post(this.url + '/unlink', data)
     } catch (error) {
-      logError(`unlink ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(
+        `unlink ${this.type} error`,
+        error,
+        error instanceof AxiosError ? error.response?.data : null,
+        this.amo.options?.logs?.customLogger,
+      )
       if (this.amo.options?.logs?.throwErrors) throw error
     }
   }

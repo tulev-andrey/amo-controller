@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import Bottleneck from 'bottleneck'
 import Leads from './Leads'
 import Companies from './Companies'
@@ -7,7 +7,6 @@ import Users from './Users'
 import Pipelines from './Pipelines'
 import LossReasons from './LossReasons'
 import Notes from './Notes'
-import AxiosInstance = Axios.AxiosInstance
 import Tags from './Tags'
 import Events from './Events'
 import Tasks from './Tasks'

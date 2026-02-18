@@ -3,6 +3,7 @@ import Amo from '../Amo'
 import { ResponseGetOnly } from '../../types/responses'
 import logError from '../../utils/error'
 import { EntitiesGetOnlyType, EntityGetOnlyClass } from '../../types/entity_get_only'
+import { AxiosError } from 'axios'
 
 export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends GetOnlyParams>
   implements EntityGetOnlyClass<E, Q>
@@ -40,7 +41,12 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends G
       }
       return result
     } catch (error) {
-      logError(`get ${this.type} error`, error, error.response?.data, this.amo.options?.logs?.customLogger)
+      logError(
+        `get ${this.type} error`,
+        error,
+        error instanceof AxiosError ? error.response?.data : null,
+        this.amo.options?.logs?.customLogger,
+      )
       if (this.amo.options?.logs?.throwErrors) throw error
       return null
     }
