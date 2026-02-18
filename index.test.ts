@@ -1,7 +1,5 @@
-import { error, log } from 'console'
 import Amo from './clasess/Amo'
 import 'dotenv/config'
-import axios from 'axios'
 
 if (!process.env.API_URL || !process.env.API_TOKEN) {
   throw new Error('API_URL and API_TOKEN must be set in .env file')
@@ -29,9 +27,14 @@ const amo = new Amo(process.env.API_URL, process.env.API_TOKEN, { logs: { throwE
 // amo.notes.leads.create([leadNote]).then((noteResponse) => {
 //   console.log(noteResponse)
 // })
-amo.companies.update([
-  {
-    id: 34134171,
-    tags_to_add: [{ name: '321' }],
-  },
-])
+amo.contacts
+  .get({
+    filter: {
+      custom_fields_values: {
+        1014961: ['123123123'],
+      },
+    },
+  })
+  .then((contacts) => {
+    console.log(contacts)
+  })
