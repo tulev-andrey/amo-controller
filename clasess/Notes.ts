@@ -11,4 +11,12 @@ export default class Notes<S extends SecondEntityType> extends Entity<'notes', N
   ) {
     super(amo, `${entity}/notes`)
   }
+
+  public pin(noteId: number) {
+    return this.amo.instance.post(`${this.url}/${noteId}/pin`)
+  }
+
+  public unpin(noteId: number) {
+    return this.amo.instance.post(`${this.url}/${noteId}/unpin`)
+  }
 }

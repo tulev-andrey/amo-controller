@@ -29,11 +29,7 @@ const amo = new Amo(process.env.API_URL, process.env.API_TOKEN, { logs: { throwE
 // })
 amo.contacts
   .get({
-    filter: {
-      custom_fields_values: {
-        1014961: ['123123123'],
-      },
-    },
+    query: 123123123,
   })
   .then((contacts) => {
     console.log(contacts)
