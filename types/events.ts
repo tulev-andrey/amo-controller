@@ -5,8 +5,8 @@ export interface Event {
   entity_type: 'lead' | 'contact' | 'company'
   created_by: number
   created_at: number
-  value_after?: any[]
-  value_before?: any[]
+  value_after?: unknown[]
+  value_before?: unknown[]
   account_id: number
   _embedded: EventEmbedded
 }

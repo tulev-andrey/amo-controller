@@ -1,4 +1,4 @@
-import { DefaultQueryParams, QueryParams } from './query_params'
+import { QueryParams } from './query_params'
 import { CustomField } from './custom_fields'
 import { CreateResponse, UpdateResponse } from './responses'
 import { Lead } from './lead'
@@ -29,13 +29,14 @@ export interface EntityClass<E extends EntitiesFields, Q extends QueryParams> {
 }
 
 export interface EntitiesFields {
-  id?: number
-  created_at: number
-  updated_at: number
+  id?: number | string
+  created_at?: number
+  updated_at?: number
+  closed_at?: number
   custom_fields_values?: CustomField[] | null
 }
 
-export type ExtendebleEntitiesForUpdate = Lead | Contact | Company
+export type ExtendableEntitiesForUpdate = Lead | Contact | Company
 
 export interface ToUpdate {
   tags_to_add?: { id?: number; name?: string }[]
@@ -50,4 +51,4 @@ export interface LinkData {
   to_entity_type: SecondEntityType
 }
 
-export interface UnlinkData extends LinkData {}
+export type UnlinkData = LinkData

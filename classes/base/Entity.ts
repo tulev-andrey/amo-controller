@@ -7,6 +7,7 @@ import {
   EntitiesType,
   EntityClass,
   EntitiesFields,
+  ExtendableEntitiesForUpdate,
   PartialExcept,
   SecondEntityType,
   UnlinkData,
@@ -20,10 +21,10 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
 {
   constructor(
     protected amo: Amo,
-    protected type: EntitiesType,
+    protected type: N,
   ) {
     this.url = 'api/v4/' + type
-    this.type = type.split('/').at(-1) as EntitiesType
+    this.type = type.split('/').at(-1) as N
     this.limit = 250
   }
 
@@ -42,6 +43,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
       const entity = response.data._embedded?.[this.type]
       if (!entity) return acc
       const result = acc.concat(entity)
+      // !params.page - need to get all pages if page is not set in params
       if (entity.length === (params.limit || this.limit) && !params.page) {
         return this.get(params, ++page, result)
       }
@@ -65,20 +67,34 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
     return field || null
   }
 
-  getNewest(entities: E[], by: 'created_at' | 'updated_at'): E {
+  getNewest(entities: E[], by: 'created_at' | 'updated_at' | 'closed_at'): E {
     let newest = entities[0]
     for (const entity of entities) {
-      if (entity[by] > newest[by]) newest = entity
+      const newestBy = newest[by]
+      if (!newestBy) {
+        newest = entity
+        continue
+      }
+      const entityBy = entity[by]
+      if (!entityBy) continue
+      if (entityBy > newestBy) newest = entity
     }
     return newest
   }
 
   getOldest(entities: E[], by: 'created_at' | 'updated_at'): E {
-    let newest = entities[0]
+    let oldest = entities[0]
     for (const entity of entities) {
-      if (entity[by] < newest[by]) newest = entity
+      const oldestBy = oldest[by]
+      if (!oldestBy) {
+        oldest = entity
+        continue
+      }
+      const entityBy = entity[by]
+      if (!entityBy) continue
+      if (entityBy < oldestBy) oldest = entity
     }
-    return newest
+    return oldest
   }
 
   async create(entities: Partial<E>[]): Promise<CreateResponse[] | null> {
@@ -98,9 +114,7 @@ export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q 
   }
 
   async update(
-    entities: (E extends infer ExtendebleEntitiesForUpdate
-      ? PartialExcept<E, 'id'> & ToUpdate
-      : PartialExcept<E, 'id'>)[],
+    entities: (E extends ExtendableEntitiesForUpdate ? PartialExcept<E, 'id'> & ToUpdate : PartialExcept<E, 'id'>)[],
   ): Promise<UpdateResponse[] | null> {
     try {
       const response = await this.amo.instance.patch<Response<N, UpdateResponse>>(this.url, entities)

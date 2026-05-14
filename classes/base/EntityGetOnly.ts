@@ -4,20 +4,21 @@ import { ResponseGetOnly } from '../../types/responses'
 import logError from '../../utils/error'
 import { EntitiesGetOnlyType, EntityGetOnlyClass } from '../../types/entity_get_only'
 import { AxiosError } from 'axios'
+import type { EntitiesFields } from '../../types/entity'
 
-export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends GetOnlyParams>
+export default class EntityGetOnly<N extends EntitiesGetOnlyType, E extends EntitiesFields, Q extends GetOnlyParams>
   implements EntityGetOnlyClass<E, Q>
 {
   constructor(
     protected amo: Amo,
-    protected type: EntitiesGetOnlyType,
+    protected type: N,
   ) {
     this.url = 'api/v4/' + type
     this.limit = 100
 
     if (/\//.test(type)) {
-      const splited = type.split('/')
-      this.type = splited[splited.length - 1] as EntitiesGetOnlyType
+      const segments = type.split('/')
+      this.type = segments[segments.length - 1] as N
     }
   }
 
@@ -55,16 +56,26 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E, Q extends G
   getNewest(entities: E[], by: 'created_at' | 'updated_at'): E {
     let newest = entities[0]
     for (const entity of entities) {
+      if (!newest[by]) {
+        newest = entity
+        continue
+      }
+      if (!entity[by]) continue
       if (entity[by] > newest[by]) newest = entity
     }
     return newest
   }
 
   getOldest(entities: E[], by: 'created_at' | 'updated_at'): E {
-    let newest = entities[0]
+    let oldest = entities[0]
     for (const entity of entities) {
-      if (entity[by] < newest[by]) newest = entity
+      if (!oldest[by]) {
+        oldest = entity
+        continue
+      }
+      if (!entity[by]) continue
+      if (entity[by] < oldest[by]) oldest = entity
     }
-    return newest
+    return oldest
   }
 }

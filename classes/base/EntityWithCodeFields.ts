@@ -27,11 +27,12 @@ export default class EntityWithCodeFields<
 
     for (const entity of entities) {
       const field = this.getCustomFieldByCode(entity, code)
-      if (field) {
+      if (field && field.values) {
         const values = field.values.map((value) => value.value)
         const test = values.some((value) => {
-          if (code === 'PHONE') return query === this.chorePhone(value)
-          if (code === 'EMAIL') return query === this.choreEmail(value)
+          const str = typeof value === 'string' ? value : String(value ?? '')
+          if (code === 'PHONE') return query === this.chorePhone(str)
+          if (code === 'EMAIL') return query === this.choreEmail(str)
           return false
         })
         if (test) {
@@ -44,10 +45,11 @@ export default class EntityWithCodeFields<
   }
 
   public getCustomFieldByCode(entity: E, code: 'PHONE' | 'EMAIL'): CustomField | null {
-    const field = entity.custom_fields_values?.find((field) => {
-      if (field.field_code && field.field_code === code) return field
-    })
-    return field || null
+    return (
+      entity.custom_fields_values?.find((field) => {
+        if (field.field_code && field.field_code === code) return field
+      }) || null
+    )
   }
 
   chorePhone(phone: string) {

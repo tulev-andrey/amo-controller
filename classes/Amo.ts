@@ -19,7 +19,7 @@ export default class Amo {
   constructor(
     private baseURL: string,
     private token: string,
-    public readonly options?: { rps?: number; logs?: { customLogger?: Logger; throwErrors: boolean } },
+    public readonly options?: { rps?: number; logs?: { customLogger?: Logger; throwErrors?: boolean } },
   ) {
     const rps = this.options?.rps || 6
     this.limiter = new Bottleneck({

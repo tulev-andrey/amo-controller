@@ -1,4 +1,4 @@
-import Amo from './clasess/Amo'
+import Amo from './classes/Amo'
 import 'dotenv/config'
 
 if (!process.env.API_URL || !process.env.API_TOKEN) {

@@ -22,11 +22,12 @@ export interface FilterLeads extends MainFilter {
   price?: FromTo
   statuses?: { pipeline_id: number; status_id: number }[]
   pipeline_id?: number | number[]
+  status?: number | number[]
 }
 
-export interface FilterContacts extends MainFilter {}
+export type FilterContacts = MainFilter
 
-export interface FilterCompanies extends MainFilter {}
+export type FilterCompanies = MainFilter
 
 export interface MainFilter {
   id?: number | number[]
@@ -38,6 +39,7 @@ export interface MainFilter {
   updated_at?: FromTo
   closed_at?: FromTo
   closest_task_at?: FromTo
+  // ONLY FOR SPECIFIC ACCOUNTS
   // custom_fields_values?: {
   //   [key: number]: (string | number | boolean)[]
   //   from?: number
@@ -66,11 +68,11 @@ export interface EventQueryParams extends Omit<DefaultQueryParams, 'filter' | 'o
   filter?: EventFilter
 }
 
-export interface UserQueryParams extends Omit<DefaultQueryParams, 'filter' | 'order' | 'query'> {}
+export type UserQueryParams = Omit<DefaultQueryParams, 'filter' | 'order' | 'query'>
 
-export interface PipelineQueryParams {}
+export type PipelineQueryParams = object
 
-export interface LossReasonQueryParams {}
+export type LossReasonQueryParams = object
 
 export interface TagQueryParams extends Omit<DefaultQueryParams, 'filter' | 'order'> {
   filter?: TagFilter
@@ -161,8 +163,8 @@ interface EventFilter {
     | 'key_action_completed'
     | 'entity_merged'
     | `custom_field_${number}_value_changed`
-  value_before?: any
-  value_after?: any
+  value_before?: unknown
+  value_after?: unknown
 }
 
 interface TagFilter {
