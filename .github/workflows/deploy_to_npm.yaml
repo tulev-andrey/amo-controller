@@ -27,6 +27,18 @@ jobs:
       - name: Build library
         run: npm run build
 
+      - name: Prepare package
+        run: |
+          cp package.json amo/package.json
+
+          if [ -f README.md ]; then
+            cp README.md amo/README.md
+          fi
+
+          if [ -f LICENSE ]; then
+            cp LICENSE amo/LICENSE
+          fi
+
       - name: Publish to NPM
         working-directory: ./amo
         run: npm publish --access public
