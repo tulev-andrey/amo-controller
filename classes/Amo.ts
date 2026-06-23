@@ -10,7 +10,7 @@ import Notes from './Notes'
 import Tags from './Tags'
 import Events from './Events'
 import Tasks from './Tasks'
-import { Logger } from 'winston'
+import { Logger } from '../types/logs'
 import qs from 'qs'
 
 export default class Amo {

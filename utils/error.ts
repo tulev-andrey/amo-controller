@@ -1,12 +1,8 @@
+import { Logger } from '../types/logs'
 import { logger } from './logger'
 import { isAxiosError } from 'axios'
 
-export default function logError(
-  name: string,
-  error: unknown,
-  data?: unknown,
-  loggerInstance = logger,
-): void {
+export default function logError(name: string, error: unknown, data?: unknown, loggerInstance: Logger = logger): void {
   let errorStr: string
   try {
     errorStr = JSON.stringify(error, null, 2)
