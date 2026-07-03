@@ -1,5 +1,5 @@
-import { Logger } from '../types/logs'
-import { logger } from './logger'
+import { Logger } from '../types/logs.js'
+import { logger } from './logger.js'
 import { isAxiosError } from 'axios'
 
 export default function logError(name: string, error: unknown, data?: unknown, loggerInstance: Logger = logger): void {

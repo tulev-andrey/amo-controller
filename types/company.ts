@@ -1,5 +1,5 @@
-import { CustomField } from './custom_fields'
-import { Tag } from './tag'
+import { CustomField } from './custom_fields.js'
+import { Tag } from './tag.js'
 
 export interface Company {
   id: number

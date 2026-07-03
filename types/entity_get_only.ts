@@ -1,5 +1,5 @@
-import type { EntitiesFields } from './entity'
-import { GetOnlyParams } from './query_params'
+import type { EntitiesFields } from './entity.js'
+import { GetOnlyParams } from './query_params.js'
 
 export type EntitiesGetOnlyType =
   | 'pipelines'

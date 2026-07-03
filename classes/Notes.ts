@@ -1,9 +1,9 @@
-import Amo from './Amo'
-import Entity from './base/Entity'
-import { Note } from '../types/note'
-import { SecondEntityType } from '../types/entity'
-import { NoteQueryParams } from '../types/query_params'
-import logError from '../utils/error'
+import Amo from './Amo.js'
+import Entity from './base/Entity.js'
+import { Note } from '../types/note.js'
+import { SecondEntityType } from '../types/entity.js'
+import { NoteQueryParams } from '../types/query_params.js'
+import logError from '../utils/error.js'
 import { AxiosError } from 'axios'
 
 export default class Notes<S extends SecondEntityType> extends Entity<`${S}/notes`, Note, NoteQueryParams> {

@@ -1,7 +1,7 @@
-import EntityGetOnly from './base/EntityGetOnly'
-import Amo from './Amo'
-import { User } from '../types/user'
-import { UserQueryParams } from '../types/query_params'
+import EntityGetOnly from './base/EntityGetOnly.js'
+import Amo from './Amo.js'
+import { User } from '../types/user.js'
+import { UserQueryParams } from '../types/query_params.js'
 
 export default class Users extends EntityGetOnly<'users', User, UserQueryParams> {
   constructor(protected amo: Amo) {

@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "esnext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
     "declaration": true,
     "outDir": "./amo",
     "rootDir": "./",
-    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,

@@ -1,8 +1,8 @@
-import { CustomField } from '../../types/custom_fields'
-import { EntitiesFields, EntitiesType } from '../../types/entity'
-import { QueryParams } from '../../types/query_params'
-import Amo from '../Amo'
-import Entity from './Entity'
+import { CustomField } from '../../types/custom_fields.js'
+import { EntitiesFields, EntitiesType } from '../../types/entity.js'
+import { QueryParams } from '../../types/query_params.js'
+import Amo from '../Amo.js'
+import Entity from './Entity.js'
 
 export default class EntityWithCodeFields<
   N extends EntitiesType,

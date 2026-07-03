@@ -1,8 +1,8 @@
-import { QueryParams } from '../../types/query_params'
-import Amo from '../Amo'
-import { CreateResponse, Response, UpdateResponse } from '../../types/responses'
-import logError from '../../utils/error'
-import { CustomField } from '../../types/custom_fields'
+import { QueryParams } from '../../types/query_params.js'
+import Amo from '../Amo.js'
+import { CreateResponse, Response, UpdateResponse } from '../../types/responses.js'
+import logError from '../../utils/error.js'
+import { CustomField } from '../../types/custom_fields.js'
 import {
   EntitiesType,
   EntityClass,
@@ -13,7 +13,7 @@ import {
   UnlinkData,
   LinkData,
   ToUpdate,
-} from '../../types/entity'
+} from '../../types/entity.js'
 import { AxiosError } from 'axios'
 
 export default class Entity<N extends EntitiesType, E extends EntitiesFields, Q extends QueryParams>

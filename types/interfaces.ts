@@ -1,4 +1,4 @@
-import { DefaultQueryParams } from './query_params'
+import { DefaultQueryParams } from './query_params.js'
 
 export interface EntityClass<E> {
   url: string

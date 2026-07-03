@@ -1,10 +1,10 @@
-import { GetOnlyParams } from '../../types/query_params'
-import Amo from '../Amo'
-import { ResponseGetOnly } from '../../types/responses'
-import logError from '../../utils/error'
-import { EntitiesGetOnlyType, EntityGetOnlyClass } from '../../types/entity_get_only'
+import { GetOnlyParams } from '../../types/query_params.js'
+import Amo from '../Amo.js'
+import { ResponseGetOnly } from '../../types/responses.js'
+import logError from '../../utils/error.js'
+import { EntitiesGetOnlyType, EntityGetOnlyClass } from '../../types/entity_get_only.js'
 import { AxiosError } from 'axios'
-import type { EntitiesFields } from '../../types/entity'
+import type { EntitiesFields } from '../../types/entity.js'
 
 export default class EntityGetOnly<N extends EntitiesGetOnlyType, E extends EntitiesFields, Q extends GetOnlyParams>
   implements EntityGetOnlyClass<E, Q>

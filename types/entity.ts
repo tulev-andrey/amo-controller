@@ -1,9 +1,9 @@
-import { QueryParams } from './query_params'
-import { CustomField } from './custom_fields'
-import { CreateResponse, UpdateResponse } from './responses'
-import { Lead } from './lead'
-import { Contact } from './contact'
-import { Company } from './company'
+import { QueryParams } from './query_params.js'
+import { CustomField } from './custom_fields.js'
+import { CreateResponse, UpdateResponse } from './responses.js'
+import { Lead } from './lead.js'
+import { Contact } from './contact.js'
+import { Company } from './company.js'
 
 export type EntitiesType =
   | 'leads'

@@ -1,7 +1,7 @@
-import Amo from './Amo'
-import { Lead } from '../types/lead'
-import Entity from './base/Entity'
-import { DefaultQueryParams } from '../types/query_params'
+import Amo from './Amo.js'
+import { Lead } from '../types/lead.js'
+import Entity from './base/Entity.js'
+import { DefaultQueryParams } from '../types/query_params.js'
 
 export default class Leads extends Entity<'leads', Lead, DefaultQueryParams> {
   constructor(protected amo: Amo) {

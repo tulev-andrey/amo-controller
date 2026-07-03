@@ -1,5 +1,5 @@
-import { EntitiesType } from './entity'
-import { EntitiesGetOnlyType } from '../types/entity_get_only'
+import { EntitiesType } from './entity.js'
+import { EntitiesGetOnlyType } from '../types/entity_get_only.js'
 
 export interface Response<T extends EntitiesType, E> {
   _embedded: { [key in T]: E[] }
