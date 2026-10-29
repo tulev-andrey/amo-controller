@@ -4,9 +4,9 @@ import { ResponseGetOnly } from '../../types/responses.js'
 import logError from '../../utils/error.js'
 import { EntitiesGetOnlyType, EntityGetOnlyClass } from '../../types/entity_get_only.js'
 import { AxiosError } from 'axios'
-import type { EntitiesFields } from '../../types/entity.js'
+import type { EntitiesGetOnly } from '../../types/entity_get_only.js'
 
-export default class EntityGetOnly<N extends EntitiesGetOnlyType, E extends EntitiesFields, Q extends GetOnlyParams>
+export default class EntityGetOnly<N extends EntitiesGetOnlyType, E extends EntitiesGetOnly, Q extends GetOnlyParams>
   implements EntityGetOnlyClass<E, Q>
 {
   constructor(
@@ -14,7 +14,6 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E extends Enti
     protected type: N,
   ) {
     this.url = 'api/v4/' + type
-    this.limit = 100
 
     if (/\//.test(type)) {
       const segments = type.split('/')
@@ -23,21 +22,22 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E extends Enti
   }
 
   readonly url: string
-  readonly limit: number
 
-  async get(params: Q = {} as Q, page = 1, acc: E[] = []): Promise<E[] | null> {
+  async get(params: Q = {} as Q, page = 1, acc: E[] = []): Promise<E[]> {
     try {
+      const limit = this.amo.options?.limit ?? 250
       const response = await this.amo.instance.get<ResponseGetOnly<N, E>>(this.url, {
         params: {
-          ...params,
+          limit,
           page,
-          limit: this.limit,
+          ...params,
         },
       })
       const entity = response.data._embedded?.[this.type]
       if (!entity) return acc
       const result = acc.concat(entity)
-      if (entity.length === this.limit) {
+      // !params.page - need to get all pages if page is not set in params
+      if (entity.length === (params?.limit || limit) && !params?.page) {
         return this.get(params, ++page, result)
       }
       return result
@@ -49,33 +49,7 @@ export default class EntityGetOnly<N extends EntitiesGetOnlyType, E extends Enti
         this.amo.options?.logs?.customLogger,
       )
       if (this.amo.options?.logs?.throwErrors) throw error
-      return null
+      return []
     }
-  }
-
-  getNewest(entities: E[], by: 'created_at' | 'updated_at'): E {
-    let newest = entities[0]
-    for (const entity of entities) {
-      if (!newest[by]) {
-        newest = entity
-        continue
-      }
-      if (!entity[by]) continue
-      if (entity[by] > newest[by]) newest = entity
-    }
-    return newest
-  }
-
-  getOldest(entities: E[], by: 'created_at' | 'updated_at'): E {
-    let oldest = entities[0]
-    for (const entity of entities) {
-      if (!oldest[by]) {
-        oldest = entity
-        continue
-      }
-      if (!entity[by]) continue
-      if (entity[by] < oldest[by]) oldest = entity
-    }
-    return oldest
   }
 }

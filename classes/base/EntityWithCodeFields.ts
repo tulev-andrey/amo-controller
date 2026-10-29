@@ -1,22 +1,28 @@
-import { CustomField } from '../../types/custom_fields.js'
-import { EntitiesFields, EntitiesType } from '../../types/entity.js'
+import { type EntityWithEntry, type MainEntitiesType } from '../../types/entity.js'
 import { QueryParams } from '../../types/query_params.js'
 import Amo from '../Amo.js'
-import Entity from './Entity.js'
+import type { ArrayOfEntities, GetCustomFieldInstance } from '../helpers/ArraysOfEntities.js'
+import { GetCustomField } from '../helpers/GetCustomField.js'
+import MainEntity from './MainEntity.js'
 
 export default class EntityWithCodeFields<
-  N extends EntitiesType,
-  E extends EntitiesFields,
+  N extends MainEntitiesType,
+  E extends EntityWithEntry,
   Q extends QueryParams,
-> extends Entity<N, E, Q> {
+> extends MainEntity<N, E, Q> {
   constructor(
     protected amo: Amo,
     name: N,
+    protected Ctor: new (entities: E[], Ctor: new (entity: E) => GetCustomFieldInstance<E>) => ArrayOfEntities<E>,
   ) {
-    super(amo, name)
+    super(amo, name, Ctor)
   }
 
-  public async getByCode(query: string, code: 'PHONE' | 'EMAIL', params: Q = {} as Q): Promise<E[] | null> {
+  public async getByCode(
+    query: string,
+    code: 'PHONE' | 'EMAIL',
+    params: Q = {} as Q,
+  ): Promise<ArrayOfEntities<E> | null> {
     if (!query) return null
     if (code === 'PHONE') query = this.chorePhone(query)
     if (code === 'EMAIL') query = this.choreEmail(query)
@@ -26,7 +32,7 @@ export default class EntityWithCodeFields<
     if (!entities) return null
 
     for (const entity of entities) {
-      const field = this.getCustomFieldByCode(entity, code)
+      const field = entity.getCustomField(code)
       if (field && field.values) {
         const values = field.values.map((value) => value.value)
         const test = values.some((value) => {
@@ -36,20 +42,12 @@ export default class EntityWithCodeFields<
           return false
         })
         if (test) {
-          result.push(entity)
+          result.push(entity.entity)
         }
       }
     }
 
-    return result.length ? result : null
-  }
-
-  public getCustomFieldByCode(entity: E, code: 'PHONE' | 'EMAIL'): CustomField | null {
-    return (
-      entity.custom_fields_values?.find((field) => {
-        if (field.field_code && field.field_code === code) return field
-      }) || null
-    )
+    return result.length ? new this.Ctor(result, GetCustomField as new (entity: E) => GetCustomFieldInstance<E>) : null
   }
 
   chorePhone(phone: string) {

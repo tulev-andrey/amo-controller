@@ -40,13 +40,13 @@ const leads = await amo.leads.get({ limit: 50 })
 
 ## Скрипты
 
-| Команда        | Назначение                    |
-| -------------- | ----------------------------- |
-| `npm run build` | Сборка TypeScript → `amo/`   |
-| `npm run lint`  | Проверка ESLint               |
-| `npm run lint:fix` | ESLint с автоисправлением  |
-| `npm run format` | Prettier                      |
-| `npm test`      | Запуск `index.test.ts` (нужен `.env`) |
+| Команда            | Назначение                            |
+| ------------------ | ------------------------------------- |
+| `npm run build`    | Сборка TypeScript → `amo/`            |
+| `npm run lint`     | Проверка ESLint                       |
+| `npm run lint:fix` | ESLint с автоисправлением             |
+| `npm run format`   | Prettier                              |
+| `npm test`         | Запуск `index.test.ts` (нужен `.env`) |
 
 ## Локальная проверка API (`npm test`)
 

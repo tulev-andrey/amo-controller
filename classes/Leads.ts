@@ -1,10 +1,20 @@
 import Amo from './Amo.js'
 import { Lead } from '../types/lead.js'
-import Entity from './base/Entity.js'
 import { DefaultQueryParams } from '../types/query_params.js'
+import MainEntity from './base/MainEntity.js'
+import { ArrayOfEntities } from './helpers/ArraysOfEntities.js'
 
-export default class Leads extends Entity<'leads', Lead, DefaultQueryParams> {
-  constructor(protected amo: Amo) {
-    super(amo, 'leads')
+/**
+ * Leads (deals) management class.
+ * Provides CRUD operations, linking, and custom field access for leads.
+ * @extends MainEntity<'leads', Lead, DefaultQueryParams>
+ */
+export default class Leads extends MainEntity<'leads', Lead, DefaultQueryParams> {
+  /**
+   * Create a new Leads manager.
+   * @param amo - Parent Amo instance
+   */
+  constructor(protected readonly amo: Amo) {
+    super(amo, 'leads', ArrayOfEntities)
   }
 }

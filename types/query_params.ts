@@ -52,9 +52,44 @@ export type QueryParams = DefaultQueryParams | TaskQueryParams
 export interface NoteQueryParams extends Omit<DefaultQueryParams, 'with' | 'query' | 'filter'> {
   filter?: NoteFilter
 }
+export interface CustomFieldQueryParams extends Omit<DefaultQueryParams, 'with' | 'query' | 'filter'> {
+  filter?: {
+    type: (
+      | 'text'
+      | 'numeric'
+      | 'checkbox'
+      | 'select'
+      | 'multiselect'
+      | 'date'
+      | 'url'
+      | 'textarea'
+      | 'radiobutton'
+      | 'streetaddress'
+      | 'smart_address'
+      | 'birthday'
+      | 'legal_entity'
+      | 'date_time'
+      | 'price'
+      | 'category'
+      | 'items'
+      | 'tracking_data'
+      | 'linked_entity'
+      | 'chained_list'
+      | 'monetary'
+      | 'file'
+      | 'payer'
+      | 'supplier'
+    )[]
+  }
+}
 
-export interface TaskQueryParams extends Omit<DefaultQueryParams, 'with' | 'query' | 'filter'> {
+export interface TaskQueryParams extends Omit<DefaultQueryParams, 'with' | 'query' | 'filter' | 'order'> {
   filter?: TaskFilter
+  order?: {
+    id?: Order
+    created_at?: Order
+    complete_till?: Order
+  }
 }
 
 export type GetOnlyParams =
@@ -70,9 +105,9 @@ export interface EventQueryParams extends Omit<DefaultQueryParams, 'filter' | 'o
 
 export type UserQueryParams = Omit<DefaultQueryParams, 'filter' | 'order' | 'query'>
 
-export type PipelineQueryParams = object
+export type PipelineQueryParams = Omit<DefaultQueryParams, 'filter' | 'order' | 'query'>
 
-export type LossReasonQueryParams = object
+export type LossReasonQueryParams = Omit<DefaultQueryParams, 'filter' | 'order' | 'query'>
 
 export interface TagQueryParams extends Omit<DefaultQueryParams, 'filter' | 'order'> {
   filter?: TagFilter
