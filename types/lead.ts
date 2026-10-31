@@ -25,8 +25,8 @@ export interface Lead {
 
 export interface LeadEmbedded {
   contacts?: EmbeddedContact[]
-  companies?: EmbeddedCompany[]
-  tags?: Tag[]
+  companies: EmbeddedCompany[]
+  tags: Tag[]
 }
 
 export interface EmbeddedContact {

@@ -1,3 +1,5 @@
+import { NoteTypes } from './note.js'
+
 export interface DefaultQueryParams {
   with?: string[]
   query?: string | number
@@ -206,15 +208,3 @@ interface TagFilter {
   id?: number | number[]
   name?: string
 }
-
-type NoteTypes =
-  | 'common' // Текстовое примечание
-  | 'call_in' // Входящий звонок
-  | 'call_out' // Исходящий звонок
-  | 'service_message' // Системное сообщение (добавляется интеграциями)
-  | 'message_cashier' // Сообщение кассиру
-  | 'geolocation' // Текстовое примечание с гео-координатами (добавляются мобильным приложением)
-  | 'sms_in' // Входящее SMS
-  | 'sms_out' // Исходящее SMS
-  | 'extended_service_message' // Расширенное системное сообщение (поддерживает больше текста и сворачивается в интерфейсе)
-  | 'attachment' // Примечание с файлом

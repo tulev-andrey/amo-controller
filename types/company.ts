@@ -20,7 +20,7 @@ export interface Company {
 export interface CompanyEmbedded {
   leads?: EmbeddedLead[]
   contacts?: EmbeddedContact[]
-  tags?: Tag[]
+  tags: Tag[]
 }
 
 export interface EmbeddedLead {

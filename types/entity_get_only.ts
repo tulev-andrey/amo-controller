@@ -4,6 +4,7 @@ import type { Tag } from './tag.js'
 import type { User } from './user.js'
 import type { Event } from './events.js'
 import { GetOnlyParams } from './query_params.js'
+import { AccountCustomField } from './custom_fields.js'
 
 export type EntitiesGetOnlyType =
   | 'account'
@@ -33,6 +34,6 @@ export interface EntitiesGetOnlyByAtClass<E extends EntitiesGetOnlyByAt, Q exten
   getOldest(entities: E[], by: 'created_at' | 'updated_at'): E
 }
 
-export type EntitiesGetOnly = Pipeline | User | Tag | EntitiesGetOnlyByAt
+export type EntitiesGetOnly = AccountCustomField | Pipeline | User | Tag | EntitiesGetOnlyByAt
 
 export type EntitiesGetOnlyByAt = LossReason | Event
