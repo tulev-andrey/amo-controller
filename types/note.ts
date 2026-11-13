@@ -11,7 +11,7 @@ export interface Note {
   params: {
     text: string
     uniq: string
-    duration: 60
+    duration: number
     source: string
     link: string
     phone: string
@@ -26,6 +26,30 @@ export interface Note {
     version_uuid: string // версия файла, можно не передавать, будет использована последняя версия
     file_uuid: string
     file_name: string // название файла, которое будет отображаться в примечании
+    // для типа amomail_message
+    thread_id: string
+    message_id: string
+    private: boolean
+    income: boolean
+    from: {
+      email: string
+      name: string
+    }
+    to: {
+      email: string
+      name: string
+    }
+    version: number
+    subject: string
+    access_granted: number
+    content_summary: string
+    attach_cnt: number
+    delivery: {
+      status: 'queued' | 'send' | 'delivered'
+      time: number
+    }
+    owner_id: string
+    // конец для типа amomail_message
   }
   account_id: number
 }
