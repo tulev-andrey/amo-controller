@@ -11,6 +11,9 @@
     "lint:fix": "eslint . --fix",
     "test": "tsx index.test.ts"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Tulev Andrey",
   "license": "MIT",
   "description": "",

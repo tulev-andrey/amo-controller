@@ -3,25 +3,32 @@ name: Publish NPM Package
 on:
   push:
     branches: [main]
-
   workflow_dispatch:
+
+concurrency:
+  group: publish-npm
+  cancel-in-progress: false
 
 jobs:
   publish:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: write
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         run: npm ci
@@ -41,8 +48,8 @@ jobs:
             cp LICENSE amo/LICENSE
           fi
 
-      - name: Publish to NPM
-        working-directory: ./amo
-        run: npm publish --access public
+      - name: Release
+        run: npx --yes semantic-release@25
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
