@@ -128,7 +128,7 @@ interface TaskFilter {
   entity_type?: 'leads' | 'contacts' | 'companies' | 'customers'
   task_type?: number | number[]
   responsible_user_id?: number | number[]
-  is_completed?: boolean
+  is_completed?: 0 | 1
   updated_at?: FromTo
 }
 

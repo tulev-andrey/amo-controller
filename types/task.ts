@@ -9,7 +9,7 @@ export interface Task {
   entity_id: number
   entity_type: 'leads' | 'contacts' | 'companies'
   duration: number
-  is_completed: 0 | 1
+  is_completed: boolean
   task_type_id: number
   text: string
   result: { text?: string }
