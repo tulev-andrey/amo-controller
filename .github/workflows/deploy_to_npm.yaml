@@ -48,6 +48,13 @@ jobs:
             cp LICENSE amo/LICENSE
           fi
 
+      - name: Inspect package contents
+        working-directory: ./amo
+        run: |
+          cat package.json
+          find . -maxdepth 3 -type f
+          npm pack --dry-run
+
       - name: Release
         run: npx --yes semantic-release@25
         env:
