@@ -45,7 +45,7 @@ export interface Note {
     content_summary: string
     attach_cnt: number
     delivery: {
-      status: 'queued' | 'send' | 'delivered' | 'failed'
+      status: 'queued' | 'sent' | 'delivered' | 'failed'
       time: number
     }
     owner_id: string
